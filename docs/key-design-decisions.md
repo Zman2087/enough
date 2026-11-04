@@ -130,6 +130,8 @@ Subframes may load, and app-bound domains are off, so ad frames still render (KD
 
 The keyboard's form-accessory bar is removed so typing feels native.
 
+Videos play inline (`allowsInlineMediaPlayback`), as in the native app. Native buttons switch pages through the site's own router rather than reloading. Each switch pushes a fresh history entry in the router's key format, because the router ignores a popstate whose state it has already handled. If the page hasn't changed after 2.5 s, the app falls back to a normal load.
+
 **Why.** If Enough feels worse than the native app, people won't keep using it.
 
 **Trade-offs.** It depends on the site's layout, for example where its tab bar sits and which headers are pinned.

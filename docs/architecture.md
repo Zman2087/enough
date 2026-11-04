@@ -19,7 +19,7 @@ The page *observes*, Swift *decides* and the engine *remembers*.
 | File | Responsibility |
 | --- | --- |
 | `FeedWebView.swift` | `FeedHost` builds the one `WKWebView` at process start, so the first request is already in flight before SwiftUI draws. The file also installs the document-start user scripts, implements the navigation policy and bridges `enough` messages to the model. |
-| `FeedModel.swift` | The observable state: today's snapshot, the current route and surface, loading and error state, and the scripts it builds (`bootScript`, `capScript`, `capUpdateScript`). It also handles commands sent to the web view (`openSearch`, `openMessages`, `openHome`, `openProfile`). |
+| `FeedModel.swift` | The observable state: today's snapshot, the current route and surface, loading and error state, and the scripts it builds (`bootScript`, `capScript`, `capUpdateScript`). It also handles commands sent to the web view (`openSearch`, `openMessages`, `openHome`, `openProfile`). These switch page inside the site through `Enough.navigate(path)`, and load the URL only if that fails. |
 | `ContentView.swift` | Composes the web view, the count ring, the Messages tab bar, the launch screen and the full-screen overlay for Reels, Explore and Stories at the cap. |
 | `SettingsView.swift` | Cap toggle and size (1–500), reset time, hide toggles and the optional remote selector URL. Also holds the `DoneOverlay`. |
 

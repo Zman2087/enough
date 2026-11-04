@@ -356,3 +356,33 @@ test("nothing counts once the cap is reached", () => {
   io.fire(document.querySelector("#organic"), 1);
   assert.equal(events.filter((e) => e.type === "postViewed").length, 0);
 });
+
+test("your own posts never count toward the cap", () => {
+  const html = `<!doctype html><html><body><main>
+    <article id="mine"><header><a href="/ada.lovelace/">ada.lovelace</a></header><a href="/p/MINE1/"><img src="m.jpg"></a></article>
+    <article id="friend"><header><a href="/friend/">friend</a></header><a href="/p/FRIEND2/"><img src="f.jpg"></a></article>
+    </main>
+    <nav><a href="/">Home</a><a href="/explore/">Explore</a><a href="/direct/inbox/">Messages</a><a href="/ada.lovelace/">Profile</a></nav>
+    </body></html>`;
+  const { document, io, events } = mount(html, "https://www.instagram.com/");
+  io.fire(document.querySelector("#mine"), 1);
+  io.fire(document.querySelector("#friend"), 1);
+  const counted = events.filter((e) => e.type === "postViewed").map((e) => e.permalink);
+  assert.deepEqual(counted, ["p/FRIEND2"]);
+  assert.equal(document.querySelector("#mine").getAttribute("data-enough-own"), "1");
+});
+
+test("in-page navigation gives the router a fresh history entry each time", () => {
+  const { dom, engine } = mount(feedHTML, "https://www.instagram.com/");
+  const keys = [];
+  dom.window.addEventListener("popstate", (e) => keys.push(e.state && e.state.key));
+  assert.equal(engine.navigate("/direct/inbox/"), true);
+  assert.equal(dom.window.location.pathname, "/direct/inbox/");
+  assert.equal(engine.navigate("/"), true);
+  assert.equal(dom.window.location.pathname, "/");
+  assert.equal(keys.length, 2);
+  assert.match(keys[0], /^state-key-\d+-\d+$/);
+  assert.notEqual(keys[0], keys[1]);
+  assert.equal(engine.navigate("javascript:alert(1)"), false);
+  assert.equal(engine.navigate("https://example.com/"), false);
+});

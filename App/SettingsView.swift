@@ -51,11 +51,14 @@ struct SettingsView: View {
     @State private var draft: EnoughSettings
     @State private var remoteDraft: String
     @State private var urlError: String?
+    @State private var capText: String
+    @FocusState private var capFieldFocused: Bool
 
     init(model: FeedModel) {
         self.model = model
         _draft = State(initialValue: model.settings)
         _remoteDraft = State(initialValue: model.settings.remoteConfigURL ?? "")
+        _capText = State(initialValue: String(model.settings.dailyCap))
     }
 
     var body: some View {
@@ -67,8 +70,33 @@ struct SettingsView: View {
                 }
                 Section("Daily cap") {
                     Toggle("Cap the feed", isOn: $draft.capEnabled)
-                    Stepper(value: $draft.dailyCap, in: EnoughConstants.minimumCap...EnoughConstants.maximumCap) {
-                        Text("Posts per day: \(draft.dailyCap)")
+                    HStack(spacing: 12) {
+                        Text("Posts per day")
+                        Spacer(minLength: 8)
+                        // Type a number or use - and +.
+                        TextField("30", text: $capText)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .font(.body.monospacedDigit())
+                            .frame(width: 56)
+                            .focused($capFieldFocused)
+                            .accessibilityLabel("Posts per day")
+                        Stepper("Posts per day", value: $draft.dailyCap, in: EnoughConstants.minimumCap...EnoughConstants.maximumCap)
+                            .labelsHidden()
+                    }
+                    .onChange(of: capText) { text in
+                        let digits = String(text.filter(\.isNumber).prefix(3))
+                        if digits != text { capText = digits; return }
+                        guard let value = Int(digits) else { return }
+                        let clamped = min(max(value, EnoughConstants.minimumCap), EnoughConstants.maximumCap)
+                        if clamped != draft.dailyCap { draft.dailyCap = clamped }
+                        if clamped != value { capText = String(clamped) }
+                    }
+                    .onChange(of: draft.dailyCap) { value in
+                        if Int(capText) != value { capText = String(value) }
+                    }
+                    .onChange(of: capFieldFocused) { focused in
+                        if !focused { capText = String(draft.dailyCap) }
                     }
                     DatePicker("Reset time", selection: resetBinding, displayedComponents: .hourAndMinute)
                 }
@@ -76,7 +104,7 @@ struct SettingsView: View {
                     Toggle("Reels", isOn: $draft.hideReels)
                     Toggle("Explore", isOn: $draft.hideExplore)
                     Toggle("Suggested posts", isOn: $draft.hideSuggested)
-                    Text("Ads stay visible and do not count.")
+                    Text(PlatformCatalog.active.hidesAds ? "Ads are hidden and do not count." : "Ads stay visible and do not count.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
@@ -103,6 +131,10 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done", action: save)
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { capFieldFocused = false }
                 }
             }
         }
@@ -131,6 +163,9 @@ struct SettingsView: View {
             return
         }
         urlError = nil
+        if let typed = Int(capText) {
+            draft.dailyCap = min(max(typed, EnoughConstants.minimumCap), EnoughConstants.maximumCap)
+        }
         draft.remoteConfigURL = trimmed.isEmpty ? nil : trimmed
         model.save(settings: draft)
         dismiss()

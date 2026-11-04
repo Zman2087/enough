@@ -7,6 +7,7 @@ struct WebCommand: Equatable {
         case loadInitial
         case reconfigure
         case openProfile
+        case navigate(path: String, fallback: URL)
     }
 
     var id: Int
@@ -118,7 +119,11 @@ final class FeedModel: ObservableObject {
     }
 
     func openHome() {
-        enqueue(.load(instagramURL("/")))
+        navigate("/")
+    }
+
+    private func navigate(_ path: String) {
+        enqueue(.navigate(path: path, fallback: instagramURL(path)))
     }
 
     func noteCaughtUp(_ value: Bool) {
@@ -173,11 +178,11 @@ final class FeedModel: ObservableObject {
     }
 
     func openMessages() {
-        enqueue(.load(instagramURL("/direct/inbox/")))
+        navigate("/direct/inbox/")
     }
 
     func openSearch() {
-        enqueue(.load(openSearchURL()))
+        enqueue(.navigate(path: PlatformCatalog.active.searchPath, fallback: openSearchURL()))
     }
 
     func openProfile() {

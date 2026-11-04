@@ -610,6 +610,7 @@
           if (!key) continue;
           el.setAttribute("data-enough-key", key);
           noteFirstPost(el);
+          if (isOwnPost(el)) continue;
           if (observed.has(el)) continue;
           observed.add(el);
           el.setAttribute("data-enough-observed", "1");
@@ -659,6 +660,7 @@
         if (el.classList.contains("enough-keep") || hasKeepAncestor(el)) continue;
         var key = permalinkFrom(el);
         if (!key) continue;
+        if (isOwnPost(el)) continue;
         if (el.classList.contains("enough-seen") || alreadySeen.has(key)) collapsed += 1;
         else if (!el.classList.contains("enough-hidden") && !el.classList.contains("enough-route-hidden")) unseen += 1;
       }
@@ -871,16 +873,73 @@
       }
     }
 
+    // The site's router ignores a popstate whose history state it has already handled,
+    // so each in-page navigation gets a fresh entry in the router's own key format.
+    var stateSerial = 0;
+    function freshState() {
+      stateSerial += 1;
+      return { key: "state-key-" + Date.now() + "-" + stateSerial };
+    }
+
+    function pushRoute(view, path, replace) {
+      var state = freshState();
+      if (replace) view.history.replaceState(state, "", path);
+      else view.history.pushState(state, "", path);
+      var PSE = view.PopStateEvent;
+      view.dispatchEvent(typeof PSE === "function" ? new PSE("popstate", { state: state }) : new view.Event("popstate"));
+    }
+
+    // Switches page inside the site, without a reload. If the page has not changed at all
+    // after a moment, the router did not take it, so fall back to a normal page load.
     function spaNavigate(path) {
       var view = doc && doc.defaultView;
       if (!view || !view.location) return;
+      var full = "https://www.instagram.com" + path;
+      var main = doc.querySelector ? doc.querySelector("main, [role='main']") : null;
+      var before = main ? main.innerHTML.length : -1;
       try {
-        view.history.pushState(view.history.state, "", path);
-        var PSE = view.PopStateEvent;
-        view.dispatchEvent(typeof PSE === "function" ? new PSE("popstate", { state: view.history.state }) : new view.Event("popstate"));
+        pushRoute(view, path, false);
       } catch (err) {
-        view.location.assign("https://www.instagram.com" + path);
+        view.location.assign(full);
+        return;
       }
+      if (!view.setTimeout) return;
+      view.setTimeout(function () {
+        if (currentPath().split("?")[0] !== path) return;
+        var now = doc.querySelector("main, [role='main']");
+        if (now && now === main && now.isConnected && now.innerHTML.length === before) view.location.assign(full);
+      }, 2500);
+    }
+
+    function ownProfilePath() {
+      var store = storage();
+      try { return store ? store.getItem(PROFILE_KEY) : null; } catch (err) { return null; }
+    }
+
+    // The author is the first link in the post to a single-segment profile path.
+    function authorPath(el) {
+      var anchors = queryAll(el, "a[href]");
+      var limit = Math.min(anchors.length, 12);
+      for (var i = 0; i < limit; i++) {
+        var href = anchors[i].getAttribute("href") || "";
+        if (href.charAt(0) !== "/") continue;
+        var parts = href.split("?")[0].split("#")[0].split("/").filter(Boolean);
+        if (parts.length !== 1 || RESERVED[parts[0].toLowerCase()]) continue;
+        return "/" + parts[0] + "/";
+      }
+      return null;
+    }
+
+    // Your own posts never count toward the cap, on any page.
+    function isOwnPost(el) {
+      if (!el || el.nodeType !== 1) return false;
+      if (el.getAttribute("data-enough-own") === "1") return true;
+      var own = ownProfilePath();
+      if (!own) return false;
+      var author = authorPath(el);
+      if (!author || author.toLowerCase() !== own.toLowerCase()) return false;
+      el.setAttribute("data-enough-own", "1");
+      return true;
     }
 
     function onIntersect(entries) {
@@ -894,6 +953,7 @@
         if (el.classList && (el.classList.contains("enough-hidden") || el.classList.contains("enough-seen") || el.classList.contains("enough-keep") || el.classList.contains("enough-cap-hidden"))) continue;
         var key = el.getAttribute("data-enough-key");
         if (!key || seen.has(key) || alreadySeen.has(key)) continue;
+        if (isOwnPost(el)) continue;
         seen.add(key);
         alreadySeen.add(key);
         el.setAttribute("data-enough-counted", "1");
@@ -954,10 +1014,7 @@
       if (!view || !view.location) return;
       var full = "https://www.instagram.com" + SEARCH_PATH;
       try {
-        if (replace) view.history.replaceState(view.history.state, "", SEARCH_PATH);
-        else view.history.pushState(view.history.state, "", SEARCH_PATH);
-        var PSE = view.PopStateEvent;
-        view.dispatchEvent(typeof PSE === "function" ? new PSE("popstate", { state: view.history.state }) : new view.Event("popstate"));
+        pushRoute(view, SEARCH_PATH, replace);
       } catch (err) {
         view.location.assign(full);
         return;
@@ -967,7 +1024,7 @@
           if (!doc.querySelector("input[type='search']") && classifyPath(currentPath()) === "search") {
             view.location.replace(full);
           }
-        }, 900);
+        }, 2000);
       }
     }
 
@@ -1076,6 +1133,16 @@
         }
         if (!candidate) return false;
         candidate.click();
+        return true;
+      },
+      navigate: function (path) {
+        if (typeof path !== "string" || !/^\/[A-Za-z0-9._\/-]*$/.test(path)) return false;
+        if (path === SEARCH_PATH) {
+          if (classifyPath(currentPath()) !== "search") goToSearch(false);
+          return true;
+        }
+        if (currentPath().split("?")[0] === path) return true;
+        spaNavigate(path);
         return true;
       },
       openDirect: function () { spaNavigate("/direct/inbox/"); return true; },

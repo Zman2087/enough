@@ -33,7 +33,7 @@ As soon as `filter.js` runs, and again whenever the DOM changes:
 
 1. Each feed `article` is observed by an `IntersectionObserver` with a 50% threshold.
 2. When it crosses the threshold, the script finds the post's permalink (`/p/<code>/` or `/reel/<code>/`).
-3. **Ads are skipped.** A post is an ad if it carries a sponsored label ("Sponsored", "Paid partnership", "Ad") or a profile link containing `a_mpk=`.
+3. **Ads and your own posts are skipped.** A post is an ad if it carries a sponsored label ("Sponsored", "Paid partnership", "Ad") or a profile link containing `a_mpk=`. A post is yours if its author link matches the profile link in the site's tab bar. That path is kept in the page's session storage only and never sent to Swift.
 4. If the cap is already reached, nothing is sent.
 5. Otherwise the page posts `{type: "postViewed", permalink}`.
 6. `UsageStore.record` normalises the permalink and ignores any it has seen today. It counts only while `count < cap` and saves to the App Group.

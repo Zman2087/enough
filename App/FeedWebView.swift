@@ -17,6 +17,7 @@ final class FeedHost: ObservableObject {
     let coordinator: FeedWebView.Coordinator
 
     init() {
+        _ = WebTiming.launched  // start the launch clock now, not at first read
         let model = FeedModel.makeShared()
         self.model = model
         coordinator = FeedWebView.Coordinator(model: model, bridge: bridge)
@@ -59,6 +60,10 @@ struct FeedWebView: UIViewRepresentable {
         // App-bound domains are intentionally off. Instagram serves ads from other
         // hosts, and limiting every navigation to instagram.com would drop those frames.
         configuration.limitsNavigationsToAppBoundDomains = false
+        // Videos play in place in the feed, as in the native app. Without this, iOS opens
+        // every video full screen. Muted feed videos may start on their own, as on the site.
+        configuration.allowsInlineMediaPlayback = true
+        configuration.mediaTypesRequiringUserActionForPlayback = []
 
         let controller = configuration.userContentController
         controller.add(bridge, name: EnoughConstants.messageHandlerName)
@@ -176,6 +181,16 @@ struct FeedWebView: UIViewRepresentable {
             case .reconfigure:
                 FeedWebView.installScripts(on: webView.configuration.userContentController, model: model)
                 webView.evaluateJavaScript(model.reconfigureScript(), completionHandler: nil)
+            case .navigate(let path, let fallback):
+                // Switch page inside the site (instant). Load the URL if the engine isn't there.
+                let literal = String(data: (try? JSONEncoder().encode(path)) ?? Data("\"/\"".utf8), encoding: .utf8) ?? "\"/\""
+                webView.evaluateJavaScript(
+                    "!!(window.Enough && window.Enough.navigate && window.Enough.navigate(\(literal)));"
+                ) { result, _ in
+                    if (result as? Bool) != true, NavigationPolicy.decide(url: fallback) == .allow {
+                        webView.load(URLRequest(url: fallback))
+                    }
+                }
             case .openProfile:
                 webView.evaluateJavaScript(
                     "window.Enough && window.Enough.openProfile && window.Enough.openProfile();",
