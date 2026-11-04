@@ -197,8 +197,14 @@ struct FeedWebView: UIViewRepresentable {
 
         func receive(_ message: WKScriptMessage) {
             guard message.name == EnoughConstants.messageHandlerName else { return }
-            guard let pageURL = message.frameInfo.request.url,
-                  NavigationPolicy.decide(url: pageURL) == .allow else { return }
+            // Only the injected scripts may talk to Swift. They run in the main frame only,
+            // so subframes (ads, about:blank, srcdoc) are ignored. The frame's origin must be
+            // https instagram.com; the navigation policy's about: allowance does not apply here.
+            let frame = message.frameInfo
+            let origin = frame.securityOrigin
+            guard frame.isMainFrame,
+                  origin.protocol == "https",
+                  NavigationPolicy.isInstagramHost(origin.host) else { return }
             guard let body = message.body as? [String: Any],
                   let type = body["type"] as? String else { return }
             let model = self.model
