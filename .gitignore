@@ -1,0 +1,15 @@
+.DS_Store
+xcuserdata/
+*.xcuserstate
+DerivedData/
+.swiftpm/
+.build/
+js-tests/node_modules/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.swift-version
+__pycache__/
+*.pyc

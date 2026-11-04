@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="456" viewBox="0 0 1200 456" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif">
+<defs>
+<marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M1,1 L11,6 L1,11" fill="none" stroke="#1e1e1e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40.0" y="46.0" font-size="22" font-weight="600" text-anchor="start" dominant-baseline="central" fill="#1e1e1e">Launch: from tap to a usable feed</text>
+<g transform="translate(40.0,96.0)">
+<rect x="0" y="0" width="200" height="120" rx="10" fill="#a5d8ff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="100.0" y="40.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">1. App starts</text>
+<text x="100.0" y="60.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">FeedHost builds the</text>
+<text x="100.0" y="80.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">one WKWebView</text>
+<rect x="230" y="0" width="200" height="120" rx="10" fill="#a5d8ff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="330.0" y="40.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">2. Session check</text>
+<text x="330.0" y="60.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">cookie names only;</text>
+<text x="330.0" y="80.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">values never read</text>
+<rect x="460" y="0" width="200" height="120" rx="10" fill="#a5d8ff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="560.0" y="40.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">3. Load</text>
+<text x="560.0" y="60.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">home feed  (signed in)</text>
+<text x="560.0" y="80.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">login page (signed out)</text>
+<rect x="690" y="0" width="200" height="120" rx="10" fill="#ffec99" stroke="#1e1e1e" stroke-width="2"/>
+<text x="790.0" y="40.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">4. Document start</text>
+<text x="790.0" y="60.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">boot payload, cap state,</text>
+<text x="790.0" y="80.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">filter.js, hide.css</text>
+<rect x="920" y="0" width="200" height="120" rx="10" fill="#ffec99" stroke="#1e1e1e" stroke-width="2"/>
+<text x="1020.0" y="40.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">5. Page has layout</text>
+<text x="1020.0" y="60.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">filter.js posts</text>
+<text x="1020.0" y="80.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">{ type: "ready" }</text>
+<rect x="920" y="200" width="200" height="120" rx="10" fill="#b2f2bb" stroke="#1e1e1e" stroke-width="2"/>
+<text x="1020.0" y="250.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">6. Launch screen hides</text>
+<text x="1020.0" y="270.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">~1.5 s on a warm start</text>
+<rect x="330" y="200" width="440" height="120" rx="10" fill="#e9ecef" stroke="#1e1e1e" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="550.0" y="230.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Fallback</text>
+<text x="550.0" y="250.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">if "ready" never arrives, the launch screen</text>
+<text x="550.0" y="270.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">still hides after 3 s; the full page load can</text>
+<text x="550.0" y="290.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">take 20 s, which is why we don't wait for it</text>
+<path d="M200.0,60.0 L230.0,60.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M430.0,60.0 L460.0,60.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M660.0,60.0 L690.0,60.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M890.0,60.0 L920.0,60.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1020.0,120.0 L1020.0,200.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M770.0,260.0 L920.0,260.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<rect x="803.7" y="248.2" width="82.6" height="23.5" rx="5" fill="#ffffff"/>
+<text x="845.0" y="260.0" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">3 s timer</text>
+</g></svg>

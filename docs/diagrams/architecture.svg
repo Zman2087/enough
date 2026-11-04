@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="836" viewBox="0 0 1260 836" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif">
+<defs>
+<marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M1,1 L11,6 L1,11" fill="none" stroke="#1e1e1e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40.0" y="46.0" font-size="22" font-weight="600" text-anchor="start" dominant-baseline="central" fill="#1e1e1e">Enough: system architecture</text>
+<g transform="translate(40.0,96.0)">
+<rect x="30" y="410" width="760" height="190" rx="14" fill="#b2f2bb" fill-opacity="0.45" stroke="#495057" stroke-width="1.2" stroke-dasharray="8 6"/>
+<text x="46.0" y="432.0" font-size="17" font-weight="600" text-anchor="start" dominant-baseline="central" fill="#495057">FilterEngine  (Swift package, shared and unit-tested)</text>
+<rect x="600" y="50" width="550" height="330" rx="14" fill="#ffec99" fill-opacity="0.45" stroke="#495057" stroke-width="1.2" stroke-dasharray="8 6"/>
+<text x="616.0" y="72.0" font-size="17" font-weight="600" text-anchor="start" dominant-baseline="central" fill="#495057">Page context (inside the web view)</text>
+<rect x="30" y="50" width="520" height="330" rx="14" fill="#a5d8ff" fill-opacity="0.45" stroke="#495057" stroke-width="1.2" stroke-dasharray="8 6"/>
+<text x="46.0" y="72.0" font-size="17" font-weight="600" text-anchor="start" dominant-baseline="central" fill="#495057">Enough.app  (SwiftUI shell)</text>
+<rect x="0" y="0" width="1180" height="700" rx="14" fill="#e9ecef" fill-opacity="0.45" stroke="#495057" stroke-width="1.2" stroke-dasharray="8 6"/>
+<text x="16.0" y="22.0" font-size="17" font-weight="600" text-anchor="start" dominant-baseline="central" fill="#495057">iPhone (everything here stays on the device)</text>
+<rect x="60" y="100" width="220" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="170.0" y="135.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">App shell</text>
+<text x="170.0" y="155.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">ContentView, Settings,</text>
+<text x="170.0" y="175.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">count ring, overlays</text>
+<rect x="300" y="100" width="220" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="410.0" y="135.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">FeedModel</text>
+<text x="410.0" y="155.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">state, cap, route,</text>
+<text x="410.0" y="175.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">commands to the page</text>
+<rect x="60" y="262" width="460" height="100" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="290.0" y="292.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">WKWebView + message bridge</text>
+<text x="290.0" y="312.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">loads instagram.com only, injects the</text>
+<text x="290.0" y="332.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">bundled script, receives page messages</text>
+<rect x="630" y="100" width="240" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="750.0" y="135.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">filter.js + hide.css</text>
+<text x="750.0" y="155.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">bundled in the app,</text>
+<text x="750.0" y="175.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">never downloaded</text>
+<rect x="890" y="100" width="230" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="1005.0" y="126.9" font-size="15" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">What it does</text>
+<text x="1005.0" y="145.6" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">hides Reels, suggestions</text>
+<text x="1005.0" y="164.4" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">collapses seen posts</text>
+<text x="1005.0" y="183.1" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">keeps ads visible</text>
+<rect x="630" y="240" width="490" height="110" rx="10" fill="#ffc9c9" stroke="#1e1e1e" stroke-width="2"/>
+<text x="875.0" y="275.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">instagram.com (mobile site)</text>
+<text x="875.0" y="295.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">you sign in on Meta's own page;</text>
+<text x="875.0" y="315.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">the app never sees the password</text>
+<rect x="60" y="460" width="160" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="140.0" y="496.2" font-size="15" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">NavigationPolicy</text>
+<text x="140.0" y="515.0" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">main frame:</text>
+<text x="140.0" y="533.8" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">instagram.com only</text>
+<rect x="240" y="460" width="160" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="320.0" y="496.2" font-size="15" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">CapPolicy</text>
+<text x="320.0" y="515.0" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">which pages</text>
+<text x="320.0" y="533.8" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">the cap blocks</text>
+<rect x="420" y="460" width="160" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="500.0" y="496.2" font-size="15" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">UsageStore</text>
+<text x="500.0" y="515.0" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">DayBoundary</text>
+<text x="500.0" y="533.8" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">count + reset</text>
+<rect x="600" y="460" width="170" height="110" rx="10" fill="#ffffff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="685.0" y="496.2" font-size="15" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">SelectorValidator</text>
+<text x="685.0" y="515.0" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">remote rules are</text>
+<text x="685.0" y="533.8" font-size="15" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">data, never script</text>
+<rect x="830" y="440" width="320" height="140" rx="10" fill="#d0bfff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="990.0" y="480.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">App Group storage</text>
+<text x="990.0" y="500.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">settings JSON</text>
+<text x="990.0" y="520.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">today's post shortcodes</text>
+<text x="990.0" y="540.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">(deleted at the reset time)</text>
+<path d="M280.0,155.0 L300.0,155.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M410.0,210.0 L409.6,262.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="372.4" y="224.2" width="74.7" height="23.5" rx="5" fill="#ffffff"/>
+<text x="409.8" y="236.0" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">commands</text>
+<path d="M520.0,292.0 L575.0,273.0 L575.0,155.0 L630.0,155.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="514.1" y="193.5" width="121.8" height="41.0" rx="5" fill="#ffffff"/>
+<text x="575.0" y="205.2" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">inject at</text>
+<text x="575.0" y="222.8" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">document start</text>
+<path d="M750.0,210.0 L750.0,240.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="704.8" y="204.5" width="90.4" height="41.0" rx="5" fill="#ffffff"/>
+<text x="750.0" y="216.2" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">observes &amp;</text>
+<text x="750.0" y="233.8" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">restyles</text>
+<path d="M679.0,350.0 L679.0,395.0 L428.0,395.0 L428.0,362.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<rect x="355.4" y="383.2" width="396.2" height="23.5" rx="5" fill="#ffffff"/>
+<text x="553.5" y="395.0" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">page messages: postViewed, route, ready, caughtUp</text>
+<path d="M500.0,570.0 L500.0,640.0 L990.0,640.0 L990.0,580.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="692.0" y="628.2" width="106.1" height="23.5" rx="5" fill="#ffffff"/>
+<text x="745.0" y="640.0" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">read / write</text>
+<path d="M138.2,362.0 L140.0,460.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="70.4" y="399.2" width="137.4" height="23.5" rx="5" fill="#ffffff"/>
+<text x="139.1" y="411.0" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">every navigation</text>
+</g></svg>

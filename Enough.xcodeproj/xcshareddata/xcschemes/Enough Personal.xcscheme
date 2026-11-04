@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1600"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+      <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "62FFE3319320FA480516489B"
+            BuildableName = "Enough.app"
+            BlueprintName = "Enough"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+      </BuildActionEntry>
+      <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "49662B332CEA1911F1453569"
+            BuildableName = "FilterEngine.framework"
+            BlueprintName = "FilterEngine"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+      </BuildActionEntry>
+      <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "6A2BAA66870418A655103E2E"
+            BuildableName = "FilterEngineTests.xctest"
+            BlueprintName = "FilterEngineTests"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+      </BuildActionEntry>
+      <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "NO">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "A7A65AE49B192DFA8CB8E756"
+            BuildableName = "EnoughSafariExtension.appex"
+            BlueprintName = "EnoughSafariExtension"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+      </BuildActionEntry>
+      <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "NO">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "ED9C20DB34C41C69345C9004"
+            BuildableName = "EnoughShieldExtension.appex"
+            BlueprintName = "EnoughShieldExtension"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+      </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Personal"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "6A2BAA66870418A655103E2E"
+            BuildableName = "FilterEngineTests.xctest"
+            BlueprintName = "FilterEngineTests"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Personal"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "62FFE3319320FA480516489B"
+            BuildableName = "Enough.app"
+            BlueprintName = "Enough"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Personal"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "62FFE3319320FA480516489B"
+            BuildableName = "Enough.app"
+            BlueprintName = "Enough"
+            ReferencedContainer = "container:Enough.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Personal">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Personal"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

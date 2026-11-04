@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "hide": {
+    "reels": [
+      "a[href='/reels/']",
+      "a[href='/reels']",
+      "a[href^='/reels/']"
+    ],
+    "explore": [
+      "a[href='/explore/']",
+      "a[href='/explore']"
+    ],
+        "suggested": [
+          "[data-enough-suggested='1']"
+        ],
+        "install": [
+          "a[href^='instagram:']",
+          "a[href*='apps.apple.com']",
+          "a[href*='itunes.apple.com']",
+          "a[href*='itms-apps']"
+        ]
+      },
+  "posts": {
+    "containers": [
+      "article"
+    ],
+    "permalink": [
+      "a[href*='/p/']",
+      "a[href*='/reel/']"
+    ],
+    "sponsored": [
+      "[data-sponsored='1']",
+      "[data-ad='1']",
+      "a[href*='a_mpk=']"
+    ]
+  },
+  "text": {
+    "suggested": [
+      "Suggested for you",
+      "Suggestions for you",
+      "Suggested posts"
+    ],
+        "sponsored": [
+          "Sponsored",
+          "Paid partnership",
+          "Ad"
+        ],
+        "install": [
+          "Open app",
+          "Open Instagram",
+          "Get the app",
+          "Get Instagram",
+          "Use the app",
+          "Open in app",
+          "Open in the app",
+          "View in app"
+        ]
+      }
+    }

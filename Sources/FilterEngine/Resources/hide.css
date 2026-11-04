@@ -1,0 +1,121 @@
+.enough-hidden,
+.enough-seen,
+.enough-route-hidden,
+.enough-cap-hidden {
+  display: none !important;
+}
+
+html, body {
+  -webkit-text-size-adjust: 100%;
+  -webkit-touch-callout: none;
+}
+
+body {
+  -webkit-user-select: none;
+}
+
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* Route rules keep anything marked .enough-keep, which is how ads stay on screen. */
+html.enough-hide-reels[data-enough-route="reels"] article:not(.enough-keep),
+html.enough-hide-explore[data-enough-route="explore"] article:not(.enough-keep) {
+  display: none !important;
+}
+
+/* App-install prompts. A link inside an ad (.enough-keep) stays visible. */
+a[href^="instagram:"],
+a[href*="apps.apple.com"],
+a[href*="itunes.apple.com"],
+a[href*="itms-apps"] {
+  display: none !important;
+}
+
+.enough-keep a[href^="instagram:"],
+.enough-keep a[href*="apps.apple.com"],
+.enough-keep a[href*="itunes.apple.com"],
+.enough-keep a[href*="itms-apps"],
+a[href^="instagram:"].enough-keep,
+a[href*="apps.apple.com"].enough-keep,
+a[href*="itunes.apple.com"].enough-keep,
+a[href*="itms-apps"].enough-keep {
+  display: revert !important;
+}
+
+/* At the daily cap the feed's posts give way to the notice. Header, stories and tabs stay. */
+html.enough-at-cap[data-enough-route="feed"] article {
+  display: none !important;
+}
+
+/* With the posts gone the site's "load more" spinner stays in view and keeps fetching.
+   Hiding it stops both. */
+html.enough-at-cap[data-enough-route="feed"] main [data-visualcompletion="loading-state"],
+html.enough-at-cap[data-enough-route="feed"] main [role="progressbar"],
+html.enough-at-cap[data-enough-route="feed"] main svg[aria-label^="Loading"] {
+  display: none !important;
+}
+
+#enough-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56px 32px 64px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: inherit;
+}
+
+#enough-notice .enough-notice-mark {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+#enough-notice[data-mode="cap"] .enough-notice-mark {
+  position: relative;
+}
+
+/* A plain clock face for the cap: two hands drawn with borders, no image. */
+#enough-notice[data-mode="cap"] .enough-notice-mark::before,
+#enough-notice[data-mode="cap"] .enough-notice-mark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transform-origin: 50% 100%;
+}
+
+#enough-notice[data-mode="cap"] .enough-notice-mark::before {
+  height: 20px;
+  transform: translateX(-50%);
+}
+
+#enough-notice[data-mode="cap"] .enough-notice-mark::after {
+  height: 14px;
+  transform: translateX(-50%) rotate(90deg);
+}
+
+#enough-notice .enough-notice-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+#enough-notice .enough-notice-body {
+  font-size: 14px;
+  line-height: 18px;
+  opacity: 0.6;
+  max-width: 280px;
+}

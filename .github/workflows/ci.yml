@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pbxproj:
+    name: Parse project.pbxproj
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject unquoted special characters
+        run: python3 scripts/lint_pbxproj.py
+      - name: Check the launch mark is visible
+        run: python3 scripts/launch_mark.py --check
+      - name: Release must not hide sponsored posts
+        run: python3 scripts/check_release_ads.py
+
+  plutil:
+    name: plutil -lint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: plutil -lint
+        run: plutil -lint Enough.xcodeproj/project.pbxproj
+
+  ios:
+    name: Type-check iOS app
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Enough (Debug, no PERSONAL_BUILD)
+        run: |
+          xcodebuild \
+            -project Enough.xcodeproj \
+            -scheme Enough \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+      - name: Build Enough Personal (PERSONAL_BUILD)
+        run: |
+          xcodebuild \
+            -project Enough.xcodeproj \
+            -scheme "Enough Personal" \
+            -configuration Personal \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build

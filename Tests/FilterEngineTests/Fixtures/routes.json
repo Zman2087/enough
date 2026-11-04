@@ -1,0 +1,20 @@
+[
+  {"path": "/", "surface": "feed", "blockedAtCap": true},
+  {"path": "/?hl=en", "surface": "feed", "blockedAtCap": true},
+  {"path": "/reels/", "surface": "reels", "blockedAtCap": true},
+  {"path": "/reels/?hl=en", "surface": "reels", "blockedAtCap": true},
+  {"path": "/reel/AbC_1/", "surface": "reels", "blockedAtCap": true},
+  {"path": "/stories/someone/", "surface": "stories", "blockedAtCap": true},
+  {"path": "/direct/inbox/", "surface": "direct", "blockedAtCap": false},
+  {"path": "/direct/inbox/?hl=en", "surface": "direct", "blockedAtCap": false},
+  {"path": "/direct/t/abc/", "surface": "direct", "blockedAtCap": false},
+  {"path": "/explore/", "surface": "explore", "blockedAtCap": true},
+  {"path": "/explore/search/", "surface": "search", "blockedAtCap": false},
+  {"path": "/explore/search/cats/", "surface": "search", "blockedAtCap": false},
+  {"path": "/accounts/login/", "surface": "login", "blockedAtCap": false},
+  {"path": "/p/ABC123/", "surface": "post", "blockedAtCap": false},
+  {"path": "/some.user/", "surface": "profile", "blockedAtCap": false},
+  {"path": "/some.user/reels/", "surface": "reels", "blockedAtCap": true},
+  {"path": "/some.user/tagged/", "surface": "profile", "blockedAtCap": false},
+  {"path": "/about/jobs/", "surface": "other", "blockedAtCap": false}
+]

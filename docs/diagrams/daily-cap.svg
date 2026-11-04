@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="586" viewBox="0 0 960 586" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif">
+<defs>
+<marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M1,1 L11,6 L1,11" fill="none" stroke="#1e1e1e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40.0" y="46.0" font-size="22" font-weight="600" text-anchor="start" dominant-baseline="central" fill="#1e1e1e">The daily cap: what changes when you hit it</text>
+<g transform="translate(40.0,96.0)">
+<rect x="0" y="60" width="300" height="170" rx="10" fill="#b2f2bb" stroke="#1e1e1e" stroke-width="2"/>
+<text x="150.0" y="115.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Under the cap</text>
+<text x="150.0" y="135.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">feed scrolls normally</text>
+<text x="150.0" y="155.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">posts count once each</text>
+<text x="150.0" y="175.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">count ring fills up</text>
+<rect x="460" y="0" width="420" height="290" rx="10" fill="#ffc9c9" stroke="#1e1e1e" stroke-width="2"/>
+<text x="670.0" y="75.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">At the cap</text>
+<text x="670.0" y="95.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Home: posts replaced in place by</text>
+<text x="670.0" y="115.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">"You're done for today"</text>
+<text x="670.0" y="135.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Header, stories tray, tab bar keep working</text>
+<text x="670.0" y="155.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Messages, Search, Profile stay open</text>
+<text x="670.0" y="175.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">An opened post shows only that post</text>
+<text x="670.0" y="195.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Stories and Reels: full-screen overlay</text>
+<text x="670.0" y="215.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Nothing more is counted</text>
+<rect x="0" y="330" width="300" height="120" rx="10" fill="#a5d8ff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="150.0" y="370.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">All caught up</text>
+<text x="150.0" y="390.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">every post already seen;</text>
+<text x="150.0" y="410.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">same in-feed notice, no cap</text>
+<rect x="460" y="350" width="420" height="100" rx="10" fill="#d0bfff" stroke="#1e1e1e" stroke-width="2"/>
+<text x="670.0" y="390.0" font-size="16" font-weight="600" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">Reset time (default 4:00 AM)</text>
+<text x="670.0" y="410.0" font-size="16" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#1e1e1e">the day's shortcode list is deleted</text>
+<path d="M300.0,145.0 L380.0,145.0 L460.0,145.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="283.0" y="124.5" width="113.9" height="41.0" rx="5" fill="#ffffff"/>
+<text x="340.0" y="136.2" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">count reaches</text>
+<text x="340.0" y="153.8" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">the cap</text>
+<path d="M670.0,290.0 L670.0,350.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M460.0,400.0 L390.0,400.0 L390.0,199.0 L300.0,199.4" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="356.6" y="287.8" width="66.9" height="23.5" rx="5" fill="#ffffff"/>
+<text x="390.0" y="299.5" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">new day</text>
+<path d="M150.0,230.0 L150.0,330.0" fill="none" stroke="#1e1e1e" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<rect x="100.9" y="268.2" width="98.2" height="23.5" rx="5" fill="#ffffff"/>
+<text x="150.0" y="280.0" font-size="14" font-weight="normal" text-anchor="middle" dominant-baseline="central" fill="#495057">nothing new</text>
+</g></svg>
