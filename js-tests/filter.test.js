@@ -386,3 +386,13 @@ test("in-page navigation gives the router a fresh history entry each time", () =
   assert.equal(engine.navigate("javascript:alert(1)"), false);
   assert.equal(engine.navigate("https://example.com/"), false);
 });
+
+test("the site's fixed tab bar is marked so it stays above search results", () => {
+  const html = `<!doctype html><html><body><main><nav><input type="search"><ul><li><a href="/someone/">someone</a></li></ul></nav></main>
+    <div id="bar" style="position: fixed; bottom: 0"><div><a href="/">Home</a><a href="/explore/search/">Search</a><a href="/direct/inbox/">Messages</a><a href="/ada.lovelace/">Profile</a></div></div>
+    </body></html>`;
+  const { document } = mount(html, "https://www.instagram.com/explore/search/");
+  assert.equal(document.querySelector("#bar").classList.contains("enough-tabbar"), true);
+  assert.equal(document.documentElement.getAttribute("data-enough-route"), "search");
+  assert.equal(document.querySelectorAll(".enough-tabbar").length, 1);
+});

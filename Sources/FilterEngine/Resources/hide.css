@@ -119,3 +119,12 @@ html.enough-at-cap[data-enough-route="feed"] main svg[aria-label^="Loading"] {
   opacity: 0.6;
   max-width: 280px;
 }
+
+/* Search: the results list belongs to the header's higher layer and drew over the
+   bottom tab bar. Keep the bar on top, and leave room so the last result scrolls clear. */
+html[data-enough-route="search"] .enough-tabbar {
+  z-index: 20 !important;
+}
+html[data-enough-route="search"] main nav ul:not(ul ul) {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+}

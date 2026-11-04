@@ -772,6 +772,7 @@
       };
       wait(function () {
         statusTimer = 0;
+        markTabBar();
         publishStatus();
       });
     }
@@ -806,6 +807,7 @@
       scanScheduled = false;
       checkReady();
       rememberProfile();
+      markTabBar();
       var batch = pending;
       pending = [];
       for (var i = 0; i < batch.length; i++) scanNode(batch[i]);
@@ -891,6 +893,27 @@
 
     // Switches page inside the site, without a reload. If the page has not changed at all
     // after a moment, the router did not take it, so fall back to a normal page load.
+    // The site's bottom tab bar is a fixed layer below the search header's layer, so on
+    // Search the results list draws over it. Mark the bar so the stylesheet can lift it
+    // there. Marking only adds a class; nothing about the bar is read or stored.
+    function markTabBar() {
+      if (!doc || !doc.querySelector) return;
+      var existing = doc.querySelector(".enough-tabbar");
+      if (existing && existing.isConnected !== false && existing.querySelector("a[href='/direct/inbox/'], a[href='/']")) return;
+      var link = doc.querySelector("a[href='/direct/inbox/']") || doc.querySelector("a[href='/']");
+      var view = doc.defaultView;
+      if (!link || !view || !view.getComputedStyle) return;
+      var el = link.parentElement;
+      for (var hops = 0; el && el !== doc.body && hops < 16; hops++) {
+        if (view.getComputedStyle(el).position === "fixed") {
+          if (existing && existing !== el) existing.classList.remove("enough-tabbar");
+          el.classList.add("enough-tabbar");
+          return;
+        }
+        el = el.parentElement;
+      }
+    }
+
     function spaNavigate(path) {
       var view = doc && doc.defaultView;
       if (!view || !view.location) return;
@@ -979,6 +1002,7 @@
         if (redirectExploreRoot()) return;
         setRoute();
         renderNotice();
+        markTabBar();
         if (routeHidesArticles()) hideRouteArticles(doc);
         emit({ type: "route", path: currentPath() });
       };
@@ -1063,6 +1087,7 @@
         applyAll();
         checkReady();
         rememberProfile();
+        markTabBar();
         ensureFollowing();
         redirectExploreRoot();
         if (typeof doc.addEventListener === "function") doc.addEventListener("click", onClickCapture, true);
