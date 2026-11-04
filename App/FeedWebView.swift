@@ -292,6 +292,17 @@ struct FeedWebView: UIViewRepresentable {
             }
         }
 
+        /// iOS can end the page's process, for example under memory pressure while videos
+        /// play. The web view is then blank (black in dark mode), so load the page again.
+        func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+            NSLog("Enough: web content process ended; reloading")
+            if webView.url != nil {
+                webView.reload()
+            } else {
+                loadInitialPage(in: webView)
+            }
+        }
+
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
             reportFailure(error)
         }

@@ -30,9 +30,17 @@
 			isa = PBXBuildFile;
 			fileRef = E1EDA6A9BAA64B72AF3CA2F8 /* ShieldConfigurationExtension.swift */;
 		};
+		23EB9534C7106BABF105FD96 /* SettingsLockTests.swift */ = {
+			isa = PBXBuildFile;
+			fileRef = 020F474B1EC88A623C4A3BDB /* SettingsLockTests.swift */;
+		};
 		2DDAADB0931DD6E9F723DA66 /* UsageStore.swift */ = {
 			isa = PBXBuildFile;
 			fileRef = AC4D2F9F8C334928655D90B3 /* UsageStore.swift */;
+		};
+		31EE26510D1F016A14EB2BCA /* SettingsLock.swift */ = {
+			isa = PBXBuildFile;
+			fileRef = 49A7A605E5B48ECDB44C59BB /* SettingsLock.swift */;
 		};
 		3BDD3C80CAF02E894E03B318 /* PolicyTests.swift */ = {
 			isa = PBXBuildFile;
@@ -158,6 +166,10 @@
 			isa = PBXBuildFile;
 			fileRef = A446439D6DF0B440439EE07F /* hide.css */;
 		};
+		AAF812BB0725CABF0A885E41 /* PINLock.swift */ = {
+			isa = PBXBuildFile;
+			fileRef = 760F9F6C4105D35CCAF9EE12 /* PINLock.swift */;
+		};
 		C1471F99090BCBC97A41E02D /* hide.css */ = {
 			isa = PBXBuildFile;
 			fileRef = A446439D6DF0B440439EE07F /* hide.css */;
@@ -273,6 +285,12 @@
 			path = EnoughSettings.swift;
 			sourceTree = "<group>";
 		};
+		020F474B1EC88A623C4A3BDB /* SettingsLockTests.swift */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = SettingsLockTests.swift;
+			sourceTree = "<group>";
+		};
 		07FED8A476CBA2896EBEB3C4 /* FeedWebView.swift */ = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -358,6 +376,12 @@
 			path = Info.plist;
 			sourceTree = "<group>";
 		};
+		49A7A605E5B48ECDB44C59BB /* SettingsLock.swift */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = SettingsLock.swift;
+			sourceTree = "<group>";
+		};
 		518DCFAEFE17A3752592F035 /* EnoughShieldExtension.appex */ = {
 			isa = PBXFileReference;
 			explicitFileType = wrapper.app-extension;
@@ -419,6 +443,12 @@
 			isa = PBXFileReference;
 			lastKnownFileType = text.json;
 			path = routes.json;
+			sourceTree = "<group>";
+		};
+		760F9F6C4105D35CCAF9EE12 /* PINLock.swift */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = PINLock.swift;
 			sourceTree = "<group>";
 		};
 		80E5B147DBC9E69667142775 /* icon-128.png */ = {
@@ -704,6 +734,7 @@
 				902B39FD98DCD134A8E8AE2A /* FixturePaths.swift */,
 				C46CB5FCB22EF2EF03D0D67D /* PolicyTests.swift */,
 				3EE17EE627A72D4E67B2BE4F /* SelectorConfigTests.swift */,
+				020F474B1EC88A623C4A3BDB /* SettingsLockTests.swift */,
 				575F92FF22848B40C7A8EBE2 /* UsageStoreTests.swift */,
 				0309E3B23E599098AF957826 /* Fixtures */,
 			);
@@ -720,6 +751,7 @@
 				A5A401F471AB2650B1084198 /* Navigation.swift */,
 				428419A874B77432F0A2C325 /* Permalink.swift */,
 				68845B164EA72DA786A9B9EF /* SelectorConfig.swift */,
+				49A7A605E5B48ECDB44C59BB /* SettingsLock.swift */,
 				13E814D86E1FFBED201CAF76 /* Storage.swift */,
 				AC4D2F9F8C334928655D90B3 /* UsageStore.swift */,
 				34B8FA397A9626A3B4E2BBFF /* Resources */,
@@ -733,6 +765,7 @@
 				6FD341B521B53260E070DA84 /* ContentView.swift */,
 				B6A0AD6FBCB369332D432291 /* FeedModel.swift */,
 				07FED8A476CBA2896EBEB3C4 /* FeedWebView.swift */,
+				760F9F6C4105D35CCAF9EE12 /* PINLock.swift */,
 				AB57A07A7BC2202AA0D363AF /* SettingsView.swift */,
 				3A7F4D0827640CDBCD930D09 /* Enough.entitlements */,
 				5E389DD53DECE08FA9D8E05A /* Info.plist */,
@@ -942,6 +975,7 @@
 				90A527500A7BE4B87B8323C2 /* ContentView.swift */,
 				7D5151EAEE703FB6A79482CF /* FeedModel.swift */,
 				20B1674F874A26D54C2638D6 /* FeedWebView.swift */,
+				AAF812BB0725CABF0A885E41 /* PINLock.swift */,
 				88C01B887B1791695D8C1E6F /* SettingsView.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -954,6 +988,7 @@
 				A36A315395F07B9DAC6F20EA /* FixturePaths.swift */,
 				3BDD3C80CAF02E894E03B318 /* PolicyTests.swift */,
 				C72BF8EC1B29822CA7C901B3 /* SelectorConfigTests.swift */,
+				23EB9534C7106BABF105FD96 /* SettingsLockTests.swift */,
 				70839AEB619E67DA93A4431D /* UsageStoreTests.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -969,6 +1004,7 @@
 				5DE2145A5C29E71AC902CA50 /* Navigation.swift */,
 				4D12EA0E7A4FFF2572AD623D /* Permalink.swift */,
 				07C8A0F2FF3B5834633CD33B /* SelectorConfig.swift */,
+				31EE26510D1F016A14EB2BCA /* SettingsLock.swift */,
 				9D9368B4852CD0D91673AA34 /* Storage.swift */,
 				2DDAADB0931DD6E9F723DA66 /* UsageStore.swift */,
 			);

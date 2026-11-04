@@ -25,7 +25,7 @@ Pull requests that break any of these can't be merged. The reasons are in [Key D
 1. **instagram.com only.** Only `https://instagram.com` and its subdomains may load in the main frame.
 2. **No remote code.** Never download, `eval` or inject remote JavaScript. Markup fixes go in selector JSON, and logic changes ship in the app bundle.
 3. **Ads stay visible in the App Store build and never count.** Sponsored selectors are an exclusion list. `PERSONAL_BUILD` belongs only to the `Personal` configuration and the `Enough Personal` scheme.
-4. **No private APIs, scraping, exporting or reading cookies or passwords.** The only stored data is today's count and post shortcodes, and it's deleted at reset.
+4. **No private APIs, scraping, exporting or reading cookies or passwords.** The only stored data is settings, post shortcodes (today's count, deleted at reset, plus a capped list that keeps seen posts collapsed) and an optional salted PIN digest.
 5. **No "Insta"/"gram" naming and no Instagram logo** in the app's own interface.
 6. **FilterEngine stays platform-independent.** No UIKit or WebKit imports in `Sources/FilterEngine/`.
 7. **Don't hand-edit `project.pbxproj`.** Update `scripts/generate_xcodeproj.py` and regenerate.

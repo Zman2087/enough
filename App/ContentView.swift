@@ -27,7 +27,7 @@ struct ContentView: View {
                 // The feed shows its own in-page notice and keeps the site's tabs.
                 // Full-screen pages that the cap blocks (stories, reels) still get the overlay.
                 DoneOverlay(
-                    count: model.snapshot.count,
+                    count: model.displayedCount,
                     resetClockText: model.resetClockText,
                     onMessages: model.openMessages,
                     onSearch: model.openSearch,
@@ -52,7 +52,7 @@ struct ContentView: View {
         .background(Color(.systemBackground))
         .overlay(alignment: .bottomTrailing) {
             if !model.isLoading && model.loadError == nil {
-                CountButton(count: model.snapshot.count, cap: model.snapshot.cap, capEnabled: model.snapshot.capEnabled) {
+                CountButton(count: model.displayedCount, cap: model.snapshot.cap, capEnabled: model.snapshot.capEnabled) {
                     showSettings = true
                 }
                 // Sits just above the site's tab bar, clear of its header buttons.

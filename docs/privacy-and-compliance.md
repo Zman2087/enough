@@ -7,7 +7,9 @@ These rules are part of the product. A change that breaks any of them won't be m
 | Data | Where | How long |
 | --- | --- | --- |
 | Settings: cap, reset time, toggles, optional selector URL | App Group `group.app.enough.shared` | Until changed |
-| Today's day key and the post shortcodes seen today (for example `p/AbC123`), at most 2,000 | App Group | Deleted at the daily reset |
+| Today's day key and the post shortcodes counted today (for example `p/AbC123`), at most 2,000 | App Group | Deleted at the daily reset |
+| Shortcodes of posts already shown, at most 4,000, so they stay collapsed next time | App Group | Oldest dropped first; deleted with the app |
+| Optional PIN lock: a random salt and a SHA-256 digest, never the PIN itself | App Group | Until the lock is removed or the app is deleted |
 | Instagram session | The web view's own cookie store (`WKWebsiteDataStore.default()`) | Managed by WebKit and the site |
 
 Nothing else is stored, and nothing is sent anywhere. The privacy manifest (`App/PrivacyInfo.xcprivacy`) declares no tracking and no data collection. The only required-reason API used is `UserDefaults`, for the App Group (`1C8F.1`).

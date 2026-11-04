@@ -58,6 +58,7 @@ function mount(html, url, toggles, extra) {
     followingURL: (extra && extra.followingURL) || "",
     hideSponsored: !!(extra && extra.hideSponsored),
     onEvent: (payload) => events.push(payload),
+    dwellMs: extra && typeof extra.dwellMs === "number" ? extra.dwellMs : 0,
     IntersectionObserver: FakeIO,
   });
   engine.start();

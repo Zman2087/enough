@@ -273,19 +273,19 @@ test("the notice is not shown off the feed", () => {
   assert.equal(document.getElementById("enough-notice"), null);
 });
 
-test("at the cap an opened post shows only that post, not the list of more posts", () => {
+test("posts opened from a profile stay readable at the cap and never count", () => {
   const html = `<!doctype html><html><body><main>
-    <article id="opened"><a href="/p/OPEN1/"><img src="a.jpg"></a></article>
-    <article id="more1"><a href="/p/MORE1/"><img src="b.jpg"></a></article>
-    <article id="more2"><a href="/p/MORE2/"><img src="c.jpg"></a></article>
+    <article id="opened"><a href="/someone/">someone</a><a href="/p/OPEN1/"><img src="a.jpg"></a></article>
+    <article id="more1"><a href="/someone/">someone</a><a href="/p/MORE1/"><img src="b.jpg"></a></article>
     </main></body></html>`;
-  const { document, engine } = mount(html, "https://www.instagram.com/p/OPEN1/");
+  const { document, engine, io, events } = mount(html, "https://www.instagram.com/someone/p/OPEN1/");
   engine.setCapState(true, "6:00 AM");
   assert.equal(document.querySelector("#opened").classList.contains("enough-cap-hidden"), false);
-  assert.equal(document.querySelector("#more1").classList.contains("enough-cap-hidden"), true);
-  assert.equal(document.querySelector("#more2").classList.contains("enough-cap-hidden"), true);
-  engine.setCapState(false, "");
   assert.equal(document.querySelector("#more1").classList.contains("enough-cap-hidden"), false);
+  engine.setCapState(false, "");
+  io.fire(document.querySelector("#opened"), 1);
+  io.fire(document.querySelector("#more1"), 1);
+  assert.equal(events.filter((e) => e.type === "postViewed").length, 0);
 });
 
 test("profile opens from a page with no tab bar using the path remembered in this page only", () => {
@@ -395,4 +395,70 @@ test("the site's fixed tab bar is marked so it stays above search results", () =
   assert.equal(document.querySelector("#bar").classList.contains("enough-tabbar"), true);
   assert.equal(document.documentElement.getAttribute("data-enough-route"), "search");
   assert.equal(document.querySelectorAll(".enough-tabbar").length, 1);
+});
+
+test("a post counts only after it stays on screen, and not if it turns out to be a suggestion", async () => {
+  const html = `<!doctype html><html><body><main>
+    <article id="friend"><header><a href="/friend/">friend</a></header><a href="/p/F1/"><img src="a.jpg"></a></article>
+    <article id="stranger"><header><a href="/stranger/">stranger</a></header><a href="/reel/S1/"><video></video></a></article>
+    <article id="brief"><header><a href="/friend2/">friend2</a></header><a href="/p/B1/"><img src="b.jpg"></a></article>
+    </main></body></html>`;
+  const { document, io, events } = mount(html, "https://www.instagram.com/", undefined, { dwellMs: 20 });
+  io.fire(document.querySelector("#friend"), 1);
+  io.fire(document.querySelector("#stranger"), 1);
+  io.fire(document.querySelector("#brief"), 1);
+  io.fire(document.querySelector("#brief"), 0.2);      // scrolled past before the dwell
+  // The stranger's Follow button loads late, while the post is on screen.
+  const follow = document.createElement("button");
+  follow.textContent = "Follow";
+  document.querySelector("#stranger header").appendChild(follow);
+  await new Promise((resolve) => setTimeout(resolve, 60));
+  const counted = events.filter((e) => e.type === "postViewed").map((e) => e.permalink);
+  assert.deepEqual(counted, ["p/F1"]);
+  assert.equal(hidden(document.querySelector("#stranger")), true);
+});
+
+test("an original-audio link inside a post hides only the link, not the post", async () => {
+  const html = `<!doctype html><html><body><main>
+    <article id="vid"><header><a href="/friend/">friend</a><div><a href="/reels/audio/123/">Original audio</a></div></header>
+      <a href="/friend/reel/V1/"><video></video></a></article>
+    </main></body></html>`;
+  const { document } = mount(html, "https://www.instagram.com/");
+  assert.equal(hidden(document.querySelector("#vid")), false);
+  assert.equal(document.querySelector("a[href='/reels/audio/123/']").classList.contains("enough-hidden"), true);
+});
+
+test("p/ and reel/ links to the same post count once", () => {
+  const html = `<!doctype html><html><body><main>
+    <article id="a"><a href="/friend/">friend</a><a href="/p/SAME1/liked_by/">likes</a></article>
+    <article id="b"><a href="/friend/">friend</a><a href="/friend/reel/SAME1/">video</a></article>
+    </main></body></html>`;
+  const { document, io, events } = mount(html, "https://www.instagram.com/");
+  io.fire(document.querySelector("#a"), 1);
+  io.fire(document.querySelector("#b"), 1);
+  assert.equal(events.filter((e) => e.type === "postViewed").length, 1);
+});
+
+test("caught up appears after the last post you can see, not above posts you scrolled past", async () => {
+  const html = `<!doctype html><html><body><main><div id="feed">
+    <article id="one"><a href="/friend/">friend</a><a href="/p/ONE/"><img></a></article>
+    <article id="two"><a href="/stranger/">stranger</a><button>Follow</button><a href="/p/TWO/"><img></a></article>
+    </div></main></body></html>`;
+  const { document, io } = mount(html, "https://www.instagram.com/");
+  io.fire(document.querySelector("#one"), 1);
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  const notice = document.getElementById("enough-notice");
+  assert.ok(notice, "notice shown");
+  assert.equal(notice.getAttribute("data-mode"), "caught");
+  assert.equal(notice.previousElementSibling && notice.previousElementSibling.id, "one");
+});
+
+test("a feed you are still reading is not called caught up", async () => {
+  const html = `<!doctype html><html><body><main><div id="feed">
+    <article id="one"><a href="/friend/">friend</a><a href="/p/ONE/"><img></a></article>
+    </div></main></body></html>`;
+  const { document, io } = mount(html, "https://www.instagram.com/");
+  io.fire(document.querySelector("#one"), 1);
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  assert.equal(document.getElementById("enough-notice"), null);
 });

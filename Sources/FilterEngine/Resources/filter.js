@@ -83,6 +83,9 @@
     var onEvent = options.onEvent;
     var seen = new Set();
     var alreadySeen = new Set(options.seen || []);
+    // Posts seen before this page loaded are collapsed. Posts you see now stay where they
+    // are, so the feed doesn't shift under you; they just don't count again.
+    var initialSeen = new Set(options.seen || []);
     var followingURL = options.followingURL || "";
     var hideSponsored = !!options.hideSponsored;
     var observed = new WeakSet();
@@ -97,8 +100,16 @@
     var didRedirect = false;
     var capState = { reached: !!(options.cap && options.cap.reached), resetText: (options.cap && options.cap.resetText) || "" };
     var NOTICE_ID = "enough-notice";
+    var lastStatus = null;
     var readySent = false;
     var PROFILE_KEY = "enough-profile-path";
+    // A post counts once it has stayed at least half on screen this long, and only if it
+    // is still a real post from someone you follow by then. Late-loading parts of a post
+    // (its Follow button, an ad label) can change that.
+    var dwellMs = typeof options.dwellMs === "number" ? options.dwellMs : 1000;
+    var dwellTimers = new Map();
+    var countedElements = new Map();
+    var pendingPosts = new Set();
 
     function normalizeToggles(value) {
       value = value || {};
@@ -363,7 +374,12 @@
         var reels = hide.reels || [];
         for (var r = 0; r < reels.length; r++) {
           var reelNodes = collect(scope, reels[r]);
-          for (var k = 0; k < reelNodes.length; k++) hideElement(tabSlot(reelNodes[k]));
+          for (var k = 0; k < reelNodes.length; k++) {
+            var reelLink = reelNodes[k];
+            var inPost = reelLink.closest && reelLink.closest((config.posts && config.posts.containers || ["article"]).join(","));
+            if (inPost) reelLink.classList.add("enough-hidden");
+            else hideElement(tabSlot(reelLink));
+          }
         }
       }
       if (toggles.hideExplore) {
@@ -554,7 +570,7 @@
           var el = nodes[n];
           if (el.classList.contains("enough-keep")) continue;
           var key = permalinkFrom(el);
-          if (!key || !alreadySeen.has(key)) continue;
+          if (!key || !(knownIn(initialSeen, key) || isDuplicateOfCounted(el, key))) continue;
           el.classList.add("enough-seen");
           el.setAttribute("data-enough-key", key);
         }
@@ -651,20 +667,41 @@
       }
     }
 
+    function isShown(el) {
+      if (el.classList.contains("enough-hidden") || el.classList.contains("enough-seen") || el.classList.contains("enough-route-hidden")) return false;
+      return !hasHiddenAncestor(el);
+    }
+
+    // unseen: shown posts not yet counted. viewed: shown posts counted on this page.
+    // collapsed: posts seen on an earlier visit. trailingHidden: hidden suggestions after
+    // the last shown post, which is where the site goes once your follows run out.
     function feedStatus() {
       var nodes = queryAll(doc, "article");
       var unseen = 0;
+      var viewed = 0;
       var collapsed = 0;
+      var lastShown = null;
+      var trailingHidden = false;
       for (var i = 0; i < nodes.length; i++) {
         var el = nodes[i];
         if (el.classList.contains("enough-keep") || hasKeepAncestor(el)) continue;
         var key = permalinkFrom(el);
         if (!key) continue;
         if (isOwnPost(el)) continue;
-        if (el.classList.contains("enough-seen") || alreadySeen.has(key)) collapsed += 1;
-        else if (!el.classList.contains("enough-hidden") && !el.classList.contains("enough-route-hidden")) unseen += 1;
+        if (el.classList.contains("enough-seen")) {
+          collapsed += 1;
+          continue;
+        }
+        if (isShown(el)) {
+          lastShown = el;
+          trailingHidden = false;
+          if (knownIn(alreadySeen, key)) viewed += 1;
+          else unseen += 1;
+        } else if (el.getAttribute("data-enough-suggested") === "1") {
+          trailingHidden = true;
+        }
       }
-      return { unseen: unseen, collapsed: collapsed };
+      return { unseen: unseen, viewed: viewed, collapsed: collapsed, lastShown: lastShown, trailingHidden: trailingHidden };
     }
 
     // The cap and "caught up" are shown inside the feed column, so the site's header,
@@ -703,7 +740,9 @@
       return box;
     }
 
-    function noticeAnchor() {
+    function noticeAnchor(mode) {
+      var last = mode === "caught" && lastStatus && lastStatus.lastShown;
+      if (last && last.isConnected !== false && last.parentElement) return { parent: last.parentElement, before: last.nextSibling };
       var first = doc.querySelector("main article") || doc.querySelector("article");
       if (first && first.parentElement) return { parent: first.parentElement, before: first };
       var main = doc.querySelector("main") || doc.body;
@@ -713,7 +752,9 @@
     // At the cap an opened post stays readable, but the "more posts" list under it does not,
     // so a single post page can't become a second feed.
     function capTrim(scope) {
-      var onPost = capState.reached && classifyPath(currentPath()) === "post";
+      // Opened posts, and the posts under them, stay readable at the cap: looking through
+      // one account's photos is not the feed. Only clear marks left by older builds.
+      var onPost = false;
       var current = onPost ? permalinkOf(currentPath()) : null;
       var nodes = onPost ? collect(scope || doc, "article") : queryAll(doc, "article.enough-cap-hidden");
       for (var i = 0; i < nodes.length; i++) {
@@ -739,21 +780,23 @@
         if (existing && existing.parentElement) existing.parentElement.removeChild(existing);
         return;
       }
-      var anchor = noticeAnchor();
+      var anchor = noticeAnchor(mode);
       if (!anchor) return;
-      if (existing && existing.getAttribute("data-mode") === mode && existing.parentElement === anchor.parent) return;
+      if (existing && existing.getAttribute("data-mode") === mode && existing.parentElement === anchor.parent
+          && (anchor.before === existing || existing.nextSibling === anchor.before)) return;
       if (existing && existing.parentElement) existing.parentElement.removeChild(existing);
       anchor.parent.insertBefore(buildNotice(mode), anchor.before);
     }
 
     function publishStatus() {
       var status = feedStatus();
+      lastStatus = status;
       var next = "loading";
-      // A feed with no unseen posts is caught up once it has rendered something we
-      // recognise: a seen post, or a suggestions block that was hidden.
-      var rendered = status.collapsed > 0 || !!doc.querySelector("[data-enough-suggested='1'].enough-hidden");
-      if (rendered && status.unseen === 0) next = "caughtUp";
-      else if (status.unseen > 0) next = "hasUnseen";
+      // Caught up: nothing unseen is shown, and the feed has clearly moved past your follows
+      // (only hidden suggestions after the last post), or opened on posts all seen before.
+      var opensCaughtUp = status.viewed === 0 && (status.collapsed > 0 || !!doc.querySelector("[data-enough-suggested='1'].enough-hidden"));
+      if (status.unseen === 0 && (status.trailingHidden || opensCaughtUp)) next = "caughtUp";
+      else if (status.unseen > 0 || status.viewed > 0) next = "hasUnseen";
       if (next === lastFeedState || next === "loading") {
         renderNotice();
         return;
@@ -810,13 +853,34 @@
       markTabBar();
       var batch = pending;
       pending = [];
-      for (var i = 0; i < batch.length; i++) scanNode(batch[i]);
+      pendingPosts.forEach(function (post) { batch.push(post); });
+      pendingPosts.clear();
+      for (var i = 0; i < batch.length; i++) {
+        if (batch[i].isConnected === false) continue;
+        scanNode(batch[i]);
+        // A post that is now hidden must not finish counting.
+        if (dwellTimers.has(batch[i]) && !isShown(batch[i])) cancelDwell(batch[i]);
+      }
       scheduleStatus();
+    }
+
+    function enclosingPost(node) {
+      var list = (config.posts && config.posts.containers) || ["article"];
+      var parent = node.parentElement;
+      return parent && parent.closest ? parent.closest(list.join(",")) : null;
     }
 
     function queueScan(node) {
       if (!node || node.nodeType !== 1 || node.id === "enough-hide-style" || node.id === NOTICE_ID) return;
       if (!readySent) checkReady();
+      // Something loaded inside a post that is already on the page (its Follow button,
+      // an ad label). Check the whole post again on the next frame.
+      var post = enclosingPost(node);
+      if (post) {
+        pendingPosts.add(post);
+        scheduleFlush();
+        return;
+      }
       // A single new post is cheap and should collapse before the next paint.
       if ((node.childElementCount || 0) < 12) {
         scanNode(node);
@@ -824,6 +888,10 @@
         return;
       }
       pending.push(node);
+      scheduleFlush();
+    }
+
+    function scheduleFlush() {
       if (scanScheduled) return;
       scanScheduled = true;
       var view = doc && doc.defaultView;
@@ -934,6 +1002,17 @@
       }, 2500);
     }
 
+    // The same post can be linked as p/CODE or reel/CODE. Treat both as one.
+    function altKey(key) {
+      var parts = String(key || "").split("/");
+      if (parts.length !== 2) return null;
+      return (parts[0] === "p" ? "reel/" : "p/") + parts[1];
+    }
+
+    function knownIn(set, key) {
+      return !!key && (set.has(key) || set.has(altKey(key)));
+    }
+
     function ownProfilePath() {
       var store = storage();
       try { return store ? store.getItem(PROFILE_KEY) : null; } catch (err) { return null; }
@@ -965,22 +1044,77 @@
       return true;
     }
 
+    // Only the home feed counts. A profile, a post opened from a profile or a message,
+    // and search never do, so you can look through someone's photos at any time.
+    function countable(el) {
+      if (!el || !el.getAttribute || el.isConnected === false) return false;
+      if (capState.reached) return false;
+      if (classifyPath(currentPath()) !== "feed") return false;
+      var cls = el.classList;
+      if (cls && (cls.contains("enough-hidden") || cls.contains("enough-seen") || cls.contains("enough-keep") || cls.contains("enough-cap-hidden") || cls.contains("enough-route-hidden"))) return false;
+      if (hasKeepAncestor(el) || hasHiddenAncestor(el)) return false;
+      if (isAdUnit(el)) {
+        classifyAd(el);
+        return false;
+      }
+      if (isOwnPost(el)) return false;
+      if (toggles.hideSuggested && currentPath().indexOf("variant=following") === -1 && hasFollowButton(el)) {
+        el.setAttribute("data-enough-suggested", "1");
+        hideElement(el);
+        return false;
+      }
+      return true;
+    }
+
+    // The site sometimes renders a post again further down. A second copy of a post counted
+    // on this page collapses; the copy you counted stays where it is.
+    function isDuplicateOfCounted(el, key) {
+      var original = countedElements.get(key) || countedElements.get(altKey(key));
+      return !!original && original !== el && original.isConnected !== false;
+    }
+
+    function commitView(el) {
+      var key = el.getAttribute("data-enough-key");
+      if (!key || knownIn(seen, key) || knownIn(alreadySeen, key)) return;
+      if (!countable(el)) return;
+      seen.add(key);
+      alreadySeen.add(key);
+      el.setAttribute("data-enough-counted", "1");
+      countedElements.set(key, el);
+      emit({ type: "postViewed", permalink: key });
+      scheduleStatus();
+    }
+
+    function cancelDwell(el) {
+      var timer = dwellTimers.get(el);
+      if (timer === undefined) return;
+      dwellTimers.delete(el);
+      var view = doc && doc.defaultView;
+      if (view && view.clearTimeout) view.clearTimeout(timer);
+    }
+
     function onIntersect(entries) {
-      if (capState.reached) return;
       for (var i = 0; i < entries.length; i++) {
         var entry = entries[i];
-        var ratio = typeof entry.intersectionRatio === "number" ? entry.intersectionRatio : 0;
-        if (ratio < 0.5) continue;
         var el = entry.target;
         if (!el || !el.getAttribute) continue;
-        if (el.classList && (el.classList.contains("enough-hidden") || el.classList.contains("enough-seen") || el.classList.contains("enough-keep") || el.classList.contains("enough-cap-hidden"))) continue;
-        var key = el.getAttribute("data-enough-key");
-        if (!key || seen.has(key) || alreadySeen.has(key)) continue;
-        if (isOwnPost(el)) continue;
-        seen.add(key);
-        alreadySeen.add(key);
-        el.setAttribute("data-enough-counted", "1");
-        emit({ type: "postViewed", permalink: key });
+        var ratio = typeof entry.intersectionRatio === "number" ? entry.intersectionRatio : 0;
+        if (ratio < 0.5) {
+          cancelDwell(el);
+          continue;
+        }
+        if (capState.reached || dwellTimers.has(el)) continue;
+        var view = doc && doc.defaultView;
+        if (dwellMs <= 0 || !view || !view.setTimeout) {
+          commitView(el);
+          continue;
+        }
+        dwellTimers.set(el, view.setTimeout((function (target) {
+          return function () {
+            dwellTimers.delete(target);
+            commitView(target);
+          };
+        })(el), dwellMs));
       }
     }
 
@@ -1109,6 +1243,7 @@
         if (doc && typeof doc.removeEventListener === "function") doc.removeEventListener("click", onClickCapture, true);
         if (mo) mo.disconnect();
         if (io) io.disconnect();
+        dwellTimers.forEach(function (timer, el) { cancelDwell(el); });
         mo = null;
         io = null;
         started = false;

@@ -146,6 +146,7 @@ def main():
         "Sources/FilterEngine/Navigation.swift",
         "Sources/FilterEngine/Permalink.swift",
         "Sources/FilterEngine/SelectorConfig.swift",
+        "Sources/FilterEngine/SettingsLock.swift",
         "Sources/FilterEngine/Storage.swift",
         "Sources/FilterEngine/UsageStore.swift",
     ]
@@ -158,6 +159,7 @@ def main():
         "App/ContentView.swift",
         "App/FeedModel.swift",
         "App/FeedWebView.swift",
+        "App/PINLock.swift",
         "App/SettingsView.swift",
     ]
     app_meta = [
@@ -171,6 +173,7 @@ def main():
         "Tests/FilterEngineTests/FixturePaths.swift",
         "Tests/FilterEngineTests/PolicyTests.swift",
         "Tests/FilterEngineTests/SelectorConfigTests.swift",
+        "Tests/FilterEngineTests/SettingsLockTests.swift",
         "Tests/FilterEngineTests/UsageStoreTests.swift",
     ]
     safari_swift = ["Extensions/Safari/SafariWebExtensionHandler.swift"]

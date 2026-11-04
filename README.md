@@ -37,13 +37,15 @@ Screen Time limits and deleting the app both cost you the parts of Instagram tha
 
 | | |
 | --- | --- |
-| **Daily post cap** | Each post counts once, when at least half of it is on screen. Your own posts never count. When the count reaches the cap, the feed is replaced in place by *"You're done for today"*. The count stops at the cap, and post pages are covered, so there's no way around it by tapping into a post. |
+| **Daily post cap** | Only the Home feed counts. A post counts once, after it has stayed at least half on screen for a second. Your own posts and ads never count. When the count reaches the cap, Home is replaced in place by *"You're done for today"*. |
+| **Browse people on purpose** | Search for someone and look through their profile and posts at any time, even at the cap. That's choosing what to see, not the feed choosing for you, so it never counts. |
+| **PIN lock** | Let a friend set a PIN in Settings. After that, raising your limit or turning hiding off needs their PIN. Lowering it never does. |
 | **Only people you follow** | Home shows posts from accounts you follow. Suggested posts and posts carrying their own *Follow* button are hidden. When you've seen them all, you get *"You're all caught up"*, not more content. |
 | **No Reels, no Explore grid** | The Reels tab is removed. The Explore tab opens Search instead, so you can find accounts without a grid of recommended posts. |
 | **Everything else still works** | Messages, Search, your Profile, notifications and posting all work normally, even after you reach the cap. |
 | **Feels like the app** | The real site runs full screen, with its own header and tab bar. Videos play in place in the feed, and tabs switch in the page without reloading it. A small progress ring shows today's count, and tapping it opens Settings, where you can type a cap or use − and +. |
 | **Resets on your schedule** | The day rolls over at a time you choose (4:00 AM by default), not at midnight. |
-| **Private by design** | You log in on Instagram's own page, and the app never sees your password. The only data stored is today's count and the IDs of posts you've seen, kept on the device and deleted at reset. |
+| **Private by design** | You log in on Instagram's own page, and the app never sees your password. The only data stored is your settings and the IDs of posts you've seen, kept on the device and never uploaded. |
 | **Ads stay ads** | Ads are left visible, as the platform requires, and they never count toward your cap. |
 
 ## How it works

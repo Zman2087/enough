@@ -40,11 +40,11 @@ Format: **Context** → **Decision** → **Why** → **Trade-offs**.
 
 **Context.** The first design covered everything with a full-screen "done" overlay at the cap, which also blocked DMs and search.
 
-**Decision.** At the cap, only the endless surfaces close: **Home, Reels, Explore and Stories**. Home shows an in-feed notice where the posts were, and the site's header and tab bar stay. Messages, Search and Profile keep working. Single post pages are covered too, so the cap can't be bypassed by tapping into a post.
+**Decision.** At the cap, only the endless surfaces close: **Home, Reels, Explore and Stories**. Home shows an in-feed notice where the posts were, and the site's header and tab bar stay. Messages, Search and Profile keep working. Profiles and the posts opened from them (or from a message) stay open and never count. Looking through one person's photos is a deliberate choice, not the endless feed.
 
 **Why.** The goal is to end doomscrolling, not to cut people off from friends. Closing the whole app pushes people back to the native app, which defeats the point.
 
-**Trade-offs.** More states to get right, for example cap-hiding on post pages and hiding the site's loading spinner, which otherwise spins forever at the cap.
+**Trade-offs.** Someone determined could browse profile by profile after the cap. That takes effort for every account, which is the point: the cap removes the effortless feed, not intent. Earlier builds covered post pages at the cap, but that blocked exactly the deliberate browsing the app means to keep.
 
 ## KDD-05: Following-only home feed
 
@@ -104,7 +104,7 @@ Subframes may load, and app-bound domains are off, so ad frames still render (KD
 
 **Context.** Counting posts means remembering which ones you've seen.
 
-**Decision.** Store only today's settings and the **post shortcodes** already in each permalink (`p/AbC123`). They are kept in the App Group, capped at 2,000 and deleted at the daily reset. Enough stores no usernames, captions, images or cookies, and nothing leaves the device.
+**Decision.** Store only the settings and the **post shortcodes** already in each permalink (`p/AbC123`). Today's list (at most 2,000) drives the count and is deleted at the daily reset. A separate list of up to 4,000 shortcodes survives the reset, so posts you've already seen stay collapsed the next day. Both live in the App Group. Enough stores no usernames, captions, images or cookies, and nothing leaves the device.
 
 **Why.** Least data is the best privacy policy, and it keeps the App Store privacy label at "Data Not Collected".
 
@@ -157,3 +157,35 @@ Videos play inline (`allowsInlineMediaPlayback`), as in the native app. Native b
 **Why.** This avoids merge conflicts in `project.pbxproj` and the slow, silent damage that hand edits cause.
 
 **Trade-offs.** Adding a file means updating the generator. [CONTRIBUTING.md](../CONTRIBUTING.md) covers this.
+
+## KDD-15: Count after a dwell, and only on Home
+
+**Context.** Posts load in pieces. A suggested reel could appear, be counted as you scrolled past, and only then get the Follow button that marks it as a suggestion and hides it. The count went up for a post you were never meant to see, and the feed jumped. The same video post could also be keyed as `p/CODE` or `reel/CODE` depending on which link loaded first.
+
+**Decision.**
+- A post counts only after it has stayed at least half on screen for one second.
+- When that second is up, it's checked again: still shown, not an ad, not yours, no Follow button.
+- Any change inside a post that is already on the page re-runs the checks on the whole post.
+- `p/CODE` and `reel/CODE` are treated as the same post.
+- Only the Home feed counts.
+- Posts you count stay where they are. Only posts seen on an earlier visit, or a second copy of one already counted, collapse.
+
+**Why.** The count should match what you actually looked at, and the feed shouldn't move under your finger.
+
+**Trade-offs.** A post flicked past in under a second isn't counted. That errs in your favour by design.
+
+## KDD-16: A PIN lock a friend holds
+
+**Context.** A limit you can raise in two taps is easy to undo in a weak moment.
+
+**Decision.** In Settings, a friend can set a 4–8 digit PIN. After that, any change that loosens a limit needs it:
+- raising the cap or turning it off
+- turning off Reels, Explore or suggestion hiding
+- changing the reset time
+- changing the selector source
+
+Tightening never needs it. The rule is `SettingsLock.loosens(from:to:)`, which is unit-tested. Only a salted SHA-256 digest is stored, next to the settings. Five wrong tries pause the prompt for a minute.
+
+**Why.** It adds a person to the decision, which is the strongest commitment device available without Screen Time entitlements.
+
+**Trade-offs.** Deleting the app clears the lock along with every setting. It makes loosening harder, not impossible, and it can't lock anyone out of their phone for good.

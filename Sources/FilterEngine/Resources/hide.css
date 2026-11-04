@@ -128,3 +128,10 @@ html[data-enough-route="search"] .enough-tabbar {
 html[data-enough-route="search"] main nav ul:not(ul ul) {
   padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
 }
+
+/* Search: at narrow widths (Display Zoom) the search field kept its natural width and ran
+   under the Cancel button. Let it shrink to its slot. */
+html[data-enough-route="search"] input,
+html[data-enough-route="search"] label:has(> input) {
+  min-width: 0 !important;
+}

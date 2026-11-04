@@ -14,6 +14,7 @@ public enum EnoughConstants {
     public static let maxSeenPermalinks = 2000
     /// Shortcodes already shown, kept across daily resets. Not uploaded.
     public static let seenLibraryKey = "enough.seen.posts"
+    public static let lockKey = "enough.lock"
     public static let seenLibraryMax = 4000
     /// Instagram's own Following feed. Suggested posts stay hidden on top of this.
     public static let startURLString = "https://www.instagram.com/"

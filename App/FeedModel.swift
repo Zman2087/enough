@@ -32,6 +32,7 @@ final class FeedModel: ObservableObject {
     let settingsStore: SettingsStoring
     let usageStore: UsageStore
     let seenLibrary: SeenLibrary
+    let lock: PINLock
     private let calendar: Calendar
     private let remoteClient: RemoteConfigClient
     private var config: SelectorConfig
@@ -44,8 +45,10 @@ final class FeedModel: ObservableObject {
         seenLibrary: SeenLibrary,
         calendar: Calendar,
         config: SelectorConfig,
-        remoteClient: RemoteConfigClient
+        remoteClient: RemoteConfigClient,
+        lock: PINLock
     ) {
+        self.lock = lock
         self.settingsStore = settingsStore
         self.usageStore = usageStore
         self.seenLibrary = seenLibrary
@@ -78,7 +81,8 @@ final class FeedModel: ObservableObject {
             seenLibrary: seenLibrary,
             calendar: calendar,
             config: config,
-            remoteClient: client
+            remoteClient: client,
+            lock: PINLock(store: PINLockStore(store: store))
         )
     }
 
@@ -233,6 +237,12 @@ final class FeedModel: ObservableObject {
     }
 
     /// Whether the daily cap blocks the feed right now, plus the reset time to show.
+    /// Today's count as shown in the app. Lowering the cap below what you've already seen
+    /// just shows the limit as reached.
+    var displayedCount: Int {
+        snapshot.capEnabled ? min(snapshot.count, snapshot.cap) : snapshot.count
+    }
+
     var capReached: Bool {
         snapshot.capEnabled && snapshot.count >= snapshot.cap
     }

@@ -31,15 +31,18 @@ As soon as `filter.js` runs, and again whenever the DOM changes:
 
 <sub>Source: [diagrams/post-counting.excalidraw](diagrams/post-counting.excalidraw)</sub>
 
-1. Each feed `article` is observed by an `IntersectionObserver` with a 50% threshold.
-2. When it crosses the threshold, the script finds the post's permalink (`/p/<code>/` or `/reel/<code>/`).
-3. **Ads and your own posts are skipped.** A post is an ad if it carries a sponsored label ("Sponsored", "Paid partnership", "Ad") or a profile link containing `a_mpk=`. A post is yours if its author link matches the profile link in the site's tab bar. That path is kept in the page's session storage only and never sent to Swift.
-4. If the cap is already reached, nothing is sent.
-5. Otherwise the page posts `{type: "postViewed", permalink}`.
-6. `UsageStore.record` normalises the permalink and ignores any it has seen today. It counts only while `count < cap` and saves to the App Group.
-7. The model publishes the new snapshot, and the count ring updates.
+1. Each feed `article` is observed by an `IntersectionObserver` with a 50% threshold. **Only the Home feed counts.** Profiles, opened posts and search never do.
+2. A post must stay at least half on screen for **one second**. Scroll it away sooner and it doesn't count. When the second is up, it's checked again, because parts of a post load late. Any change inside a post re-runs the checks on the whole post.
+3. The script finds the post's permalink (`/p/<code>/` or `/reel/<code>/`; both forms are the same post).
+4. **Ads, suggestions and your own posts are skipped.** A post with its own Follow button is a suggestion. A post is an ad if it carries a sponsored label ("Sponsored", "Paid partnership", "Ad") or a profile link containing `a_mpk=`. A post is yours if its author link matches the profile link in the site's tab bar. That path is kept in the page's session storage only and never sent to Swift.
+5. If the cap is already reached, nothing is sent.
+6. Otherwise the page posts `{type: "postViewed", permalink}`.
+7. `UsageStore.record` normalises the permalink and ignores any it has seen today. It counts only while `count < cap` and saves to the App Group.
+8. The model publishes the new snapshot, and the count ring updates.
 
-Seen posts are marked `enough-seen` and collapse on later visits, so the feed starts with what's new. When nothing unseen is left, the page shows **"You're all caught up"** in the feed column, and the header, stories and tab bar keep working.
+Posts seen on an earlier visit are marked `enough-seen` and collapse, so the feed starts with what's new. Posts you count now stay in place. Once the feed moves past your follows (only hidden suggestions after your last post), the page shows **"You're all caught up"** right after the last post you can see. The header, stories and tab bar keep working.
+
+If you lower the cap below today's count, the app simply shows the limit as reached.
 
 ## 4. Reaching the cap
 
@@ -51,7 +54,7 @@ When the count reaches the cap:
 
 - Swift's `syncCap` evaluates `capUpdateScript` on the live page and reinstalls the document-start scripts with `reached: true`.
 - **Home** replaces its posts with **"You're done for today"** and the reset time. The `html` element gets the class `enough-at-cap`, which hides posts and loading spinners. The site's header, stories row and tab bar stay usable.
-- **Single post pages** are covered too (`capTrim`), so tapping into a post from a profile doesn't get around the cap.
+- **Profiles and opened posts** stay open. Looking through someone's photos is deliberate and never counts.
 - **Reels, Explore and Stories** are covered by a full-screen native overlay with buttons for Messages, Search and Profile.
 - **Messages, Search, your Profile and settings** keep working.
 
